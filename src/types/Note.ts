@@ -32,3 +32,17 @@ export type NoteModalProps = {
 export interface NoteFormProps {
   onClose: () => void;
 }
+
+export type FetchNotesParams = {
+  page: number;
+  searchQuery?: string;
+};
+
+export interface SearchBoxProps {
+  value: string;
+  onSearch: (value: string) => void;
+}
+
+export type CreateNoteProps = {
+  onSuccess?: () => void;
+};

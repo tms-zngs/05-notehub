@@ -1,7 +1,9 @@
 import css from "./NoteForm.module.css";
 import type { NoteFormProps, NoteFormValues } from "../../types/Note";
+import { useCreateNote } from "../CreateNote/HookMutation";
 import { Formik, Form, Field, ErrorMessage, type FormikHelpers } from "formik";
 import * as Yup from "yup";
+import toast from "react-hot-toast";
 
 export default function NoteForm({ onClose }: NoteFormProps) {
   const initialValues: NoteFormValues = {
@@ -10,9 +12,11 @@ export default function NoteForm({ onClose }: NoteFormProps) {
     tag: "Todo",
   };
 
+  const mutation = useCreateNote();
+
   const noteFormSchema = Yup.object().shape({
     title: Yup.string()
-      .min(3, "Name must be at least 2 characters")
+      .min(3, "Name must be at least 3 characters")
       .max(50, "Name is too long")
       .required("Title is required"),
     content: Yup.string()
@@ -25,9 +29,14 @@ export default function NoteForm({ onClose }: NoteFormProps) {
     values: NoteFormValues,
     actions: FormikHelpers<NoteFormValues>
   ) => {
-    console.log("order data:", values);
-    actions.resetForm();
-    onClose();
+    mutation.mutate(values, {
+      onSuccess: () => {
+        toast.success("New note created successfully");
+        actions.resetForm();
+        onClose();
+      },
+    });
+    console.log("Note data:", values);
   };
 
   return (

@@ -1,22 +1,41 @@
-// fetchNotes
-// createNote
-// deleteNote;
-
 import axios from "axios";
-// import { useMutation } from "@tanstack/react-query";
+import type { FetchNotesParams, NoteFormValues, Note } from "../types/Note";
 
-export const fetchNotes = async (page = 1) => {
-  const token = import.meta.env.VITE_NOTEHUB_TOKEN;
-  const url = "https://notehub-public.goit.study/api";
-  const perPage = 10;
+axios.defaults.baseURL = "https://notehub-public.goit.study/api";
+const token = import.meta.env.VITE_NOTEHUB_TOKEN;
 
-  const response = await axios.get(
-    `${url}/notes?page=${page}&perPage=${perPage}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+export const fetchNotes = async ({
+  page = 1,
+  searchQuery,
+}: FetchNotesParams): Promise<{ notes: Note[]; totalPages: number }> => {
+  const perPage = 12;
+
+  const response = await axios.get(`/notes`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    params: {
+      page,
+      perPage,
+      search: searchQuery,
+    },
+  });
   return response.data;
+};
+
+export const createNote = async (newNote: NoteFormValues): Promise<Note> => {
+  const response = await axios.post(`/notes`, newNote, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
+export const deleteNote = async (id: string): Promise<void> => {
+  await axios.delete(`/notes/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 };

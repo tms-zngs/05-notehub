@@ -7,17 +7,26 @@ import NoteModal from "../NoteModal/NoteModal.tsx";
 import NoteForm from "../NoteForm/NoteForm.tsx";
 import SearchBox from "../SearchBox/SearchBox.tsx";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useDebounce } from "use-debounce";
+import { Toaster } from "react-hot-toast";
+import type { Note } from "../../types/Note.ts";
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery] = useDebounce(searchQuery, 300);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const { data } = useQuery({
-    queryKey: ["notes", currentPage],
-    queryFn: () => fetchNotes(currentPage),
+  const { data } = useQuery<{ notes: Note[]; totalPages: number }, Error>({
+    queryKey: ["notes", currentPage, debouncedSearchQuery],
+    queryFn: () =>
+      fetchNotes({
+        page: currentPage,
+        searchQuery: debouncedSearchQuery || undefined,
+      }),
     placeholderData: keepPreviousData,
   });
 
@@ -25,7 +34,7 @@ export default function App() {
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
-        <SearchBox />
+        <SearchBox value={searchQuery} onSearch={setSearchQuery} />
         {totalPages > 1 && (
           <Pagination
             totalPages={totalPages}
@@ -37,6 +46,9 @@ export default function App() {
           Create note +
         </button>
       </header>
+      <div>
+        <Toaster position="top-center" reverseOrder={true} />
+      </div>
       <NoteList notes={data?.notes || []} />
       {isModalOpen && (
         <NoteModal onClose={closeModal}>

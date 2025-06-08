@@ -2,7 +2,7 @@ import css from "./Pagination.module.css";
 import ReactPaginate from "react-paginate";
 import type { PaginationProps } from "../../types/Note";
 
-export default function Paginaton({
+export default function Pagination({
   totalPages,
   currentPage,
   onPageChange,

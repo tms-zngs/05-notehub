@@ -1,7 +1,10 @@
 import css from "./NoteList.module.css";
 import type { NoteProps } from "../../types/Note";
+import { useDeleteNote } from "../CreateNote/HookMutation";
 
 export default function NoteList({ notes }: NoteProps) {
+  const { mutate, isPending } = useDeleteNote();
+
   return (
     <ul className={css.list}>
       {notes.map((note) => (
@@ -10,7 +13,13 @@ export default function NoteList({ notes }: NoteProps) {
           <p className={css.content}>{note.content}</p>
           <div className={css.footer}>
             <span className={css.tag}>{note.tag}</span>
-            <button className={css.button}>Delete</button>
+            <button
+              className={css.button}
+              onClick={() => mutate(note.id)}
+              disabled={isPending}
+            >
+              Delete
+            </button>
           </div>
         </li>
       ))}
