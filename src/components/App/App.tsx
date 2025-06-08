@@ -1,7 +1,7 @@
 import css from "./App.module.css";
 import NoteList from "../NoteList/NoteList.tsx";
 import { useState } from "react";
-import { fetchNotes } from "../../services/NoteSevice.ts";
+import { fetchNotes } from "../../services/noteService.ts";
 import Pagination from "../Pagination/Pagination.tsx";
 import NoteModal from "../NoteModal/NoteModal.tsx";
 import NoteForm from "../NoteForm/NoteForm.tsx";
@@ -9,7 +9,7 @@ import SearchBox from "../SearchBox/SearchBox.tsx";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useDebounce } from "use-debounce";
 import { Toaster } from "react-hot-toast";
-import type { Note } from "../../types/Note.ts";
+import type { Note } from "../../types/note.ts";
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState(1);

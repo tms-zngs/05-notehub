@@ -1,5 +1,5 @@
 import css from "./NoteForm.module.css";
-import type { NoteFormProps, NoteFormValues } from "../../types/Note";
+import type { NoteFormProps, NoteFormValues } from "../../types/note";
 import { useCreateNote } from "../CreateNote/HookMutation";
 import { Formik, Form, Field, ErrorMessage, type FormikHelpers } from "formik";
 import * as Yup from "yup";

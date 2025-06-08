@@ -1,6 +1,6 @@
 import css from "./NoteList.module.css";
-import type { NoteProps } from "../../types/Note";
 import { useDeleteNote } from "../CreateNote/HookMutation";
+import type { NoteProps } from "../../types/note";
 
 export default function NoteList({ notes }: NoteProps) {
   const { mutate, isPending } = useDeleteNote();

@@ -1,6 +1,6 @@
 import css from "./Pagination.module.css";
 import ReactPaginate from "react-paginate";
-import type { PaginationProps } from "../../types/Note";
+import type { PaginationProps } from "../../types/note";
 
 export default function Pagination({
   totalPages,

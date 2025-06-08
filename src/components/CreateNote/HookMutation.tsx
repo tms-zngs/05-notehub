@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createNote, deleteNote } from "../../services/NoteSevice.ts";
+import { createNote, deleteNote } from "../../services/noteService.ts";
 import toast from "react-hot-toast";
 
 export function useCreateNote() {

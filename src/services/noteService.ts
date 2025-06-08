@@ -1,6 +1,5 @@
 import axios from "axios";
-import type { FetchNotesParams, NoteFormValues, Note } from "../types/Note";
-
+import type { FetchNotesParams, Note, NoteFormValues } from "../types/note";
 axios.defaults.baseURL = "https://notehub-public.goit.study/api";
 const token = import.meta.env.VITE_NOTEHUB_TOKEN;
 

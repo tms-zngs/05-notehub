@@ -1,7 +1,7 @@
 import css from "./NoteModal.module.css";
 import { createPortal } from "react-dom";
 import { useEffect, useRef } from "react";
-import type { NoteModalProps } from "../../types/Note.ts";
+import type { NoteModalProps } from "../../types/note.ts";
 
 export default function NoteModal({ children, onClose }: NoteModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
