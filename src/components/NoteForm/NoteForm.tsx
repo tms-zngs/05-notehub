@@ -1,28 +1,50 @@
 import css from "./NoteForm.module.css";
-import type { NoteFormProps, NoteFormValues } from "../../types/note";
-import { useCreateNote } from "../CreateNote/HookMutation";
+import type { NoteFormProps, NoteFormValues, TagName } from "../../types/note";
 import { Formik, Form, Field, ErrorMessage, type FormikHelpers } from "formik";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { createNote } from "../../services/noteService";
 
 export default function NoteForm({ onClose }: NoteFormProps) {
+  const queryClient = useQueryClient();
+
   const initialValues: NoteFormValues = {
     title: "",
     content: "",
     tag: "Todo",
   };
 
-  const mutation = useCreateNote();
+  const allowedTags: TagName[] = [
+    "Work",
+    "Personal",
+    "Meeting",
+    "Shopping",
+    "Todo",
+  ];
 
   const noteFormSchema = Yup.object().shape({
     title: Yup.string()
       .min(3, "Name must be at least 3 characters")
       .max(50, "Name is too long")
       .required("Title is required"),
-    content: Yup.string()
-      .max(500, "Content is too long")
-      .required("Content is required"),
-    tag: Yup.string().required("Tag is required"),
+    content: Yup.string().max(500, "Content is too long"),
+    tag: Yup.string()
+      .required("Tag is required")
+      .oneOf(allowedTags, "Invalid tag selected"),
+  });
+
+  const mutation = useMutation({
+    mutationFn: createNote,
+    onSuccess: () => {
+      toast.success("New note created successfully");
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
+      onClose();
+    },
+    onError: (error) => {
+      console.error("Failed to create note:", error);
+      toast.error("Failed to create note");
+    },
   });
 
   const handleSubmit = (
@@ -30,13 +52,10 @@ export default function NoteForm({ onClose }: NoteFormProps) {
     actions: FormikHelpers<NoteFormValues>
   ) => {
     mutation.mutate(values, {
-      onSuccess: () => {
-        toast.success("New note created successfully");
-        actions.resetForm();
-        onClose();
+      onSettled: () => {
+        actions.setSubmitting(false);
       },
     });
-    console.log("Note data:", values);
   };
 
   return (

@@ -1,9 +1,13 @@
 import css from "./NoteModal.module.css";
 import { createPortal } from "react-dom";
 import { useEffect, useRef } from "react";
-import type { NoteModalProps } from "../../types/note.ts";
+import NoteForm from "../NoteForm/NoteForm";
 
-export default function NoteModal({ children, onClose }: NoteModalProps) {
+interface NoteModalProps {
+  onClose: () => void;
+}
+
+export default function NoteModal({ onClose }: NoteModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -34,7 +38,9 @@ export default function NoteModal({ children, onClose }: NoteModalProps) {
       ref={modalRef}
       onClick={handleBackdropClick}
     >
-      <div className={css.modal}>{children}</div>
+      <div className={css.modal}>
+        <NoteForm onClose={onClose} />
+      </div>
     </div>,
     document.body
   );

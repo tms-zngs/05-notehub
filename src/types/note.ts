@@ -1,15 +1,9 @@
 export type TagName = "Work" | "Personal" | "Meeting" | "Shopping" | "Todo";
 export interface Note {
-  id: string;
+  id: number;
   title: string;
   content: string;
-  createdAt: string;
-  updatedAt: string;
   tag: "Work" | "Personal" | "Meeting" | "Shopping" | "Todo";
-}
-
-export interface NoteProps {
-  notes: Note[];
 }
 
 export interface PaginationProps {
@@ -23,12 +17,6 @@ export interface NoteFormValues {
   content: string;
   tag: TagName;
 }
-
-export type NoteModalProps = {
-  onClose: () => void;
-  children: React.ReactNode;
-};
-
 export interface NoteFormProps {
   onClose: () => void;
 }
@@ -37,6 +25,11 @@ export type FetchNotesParams = {
   page: number;
   searchQuery?: string;
 };
+
+export interface ApiResponse {
+  notes: Note[];
+  totalPages: number;
+}
 
 export interface SearchBoxProps {
   value: string;
