@@ -1,11 +1,14 @@
 import css from "./NoteForm.module.css";
-import type { NoteFormProps, NoteFormValues, TagName } from "../../types/note";
+import type { NoteFormValues, TagName } from "../../types/note";
 import { Formik, Form, Field, ErrorMessage, type FormikHelpers } from "formik";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { createNote } from "../../services/noteService";
 
+export interface NoteFormProps {
+  onClose: () => void;
+}
 export default function NoteForm({ onClose }: NoteFormProps) {
   const queryClient = useQueryClient();
 
